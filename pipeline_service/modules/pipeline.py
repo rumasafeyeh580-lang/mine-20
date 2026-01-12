@@ -79,6 +79,7 @@ class GenerationPipeline:
             "positive": ["Show this object in right three-quarters view and make sure it is fully visible. Turn background neutral solid color contrasting with an object. Delete background details. Delete watermarks. Keep object colors. Sharpen image details",
                         "Show this object in back view and make sure it is fully visible. Turn background neutral solid color contrasting with an object. Delete background details. Delete watermarks. Keep object colors. Sharpen image details"]
         }
+        logger.info("call edit_image")
         # Stage 0: Remove background
         images = self.qwen_edit.edit_image(
             prompt_image=image,
@@ -86,6 +87,7 @@ class GenerationPipeline:
             prompting=background_prompt,
             encode_prompt=False
         )
+        logger.info("call edit_image")
         # Stage 1: Generate novel views (2 additional views)
         images += self.qwen_edit.edit_image(
             prompt_image=image,

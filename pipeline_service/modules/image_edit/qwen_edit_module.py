@@ -210,6 +210,7 @@ class QwenEditModule(QwenManager):
             prompting_args = prompting.model_dump()
             
             # Run the edit pipe
+            logger.info("run edit pipe")
             result = self._run_edit_pipe(prompt_images=prompt_images,
                                         **prompting_args,
                                         seed=seed)
