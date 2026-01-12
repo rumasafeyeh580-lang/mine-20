@@ -18,7 +18,7 @@ from schemas import (
     TrellisRequest,
     TrellisResult,
 )
-from modules.image_edit.qwen_edit_module import QwenEditModule
+from modules.image_edit.qwen_edit_module import QwenEditModule, TextPrompting
 from modules.background_removal.rmbg_manager import BackgroundRemovalService
 from modules.gs_generator.trellis_manager import TrellisService
 from modules.utils import (
@@ -71,11 +71,11 @@ class GenerationPipeline:
             List of edited images
         """
         
-        background_prompt = {
+        background_prompt: TextPrompting = {
             "positive": "Show this object in left three-quarters view and make sure it is fully visible. Turn background neutral solid color contrasting with an object. Delete background details. Delete watermarks. Keep object colors. Sharpen image details",
             "negative": ""
         }
-        views_prompt = {
+        views_prompt: TextPrompting = {
             "positive": ["Show this object in right three-quarters view and make sure it is fully visible. Turn background neutral solid color contrasting with an object. Delete background details. Delete watermarks. Keep object colors. Sharpen image details",
                         "Show this object in back view and make sure it is fully visible. Turn background neutral solid color contrasting with an object. Delete background details. Delete watermarks. Keep object colors. Sharpen image details"]
         }
