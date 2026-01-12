@@ -17,7 +17,7 @@ import hashlib
 from diffusers.models import QwenImageTransformer2DModel
 from modules.image_edit.qwen_manager import QwenManager
 from modules.image_edit.prompting import Prompting, TextPrompting, EmbeddedPrompting
-from config.settings import QwenConfig
+from config import Settings
 
 CONDITION_IMAGE_SIZE = 384 * 384
 INPUT_IMAGE_SIZE = 1024 * 1024
@@ -27,7 +27,7 @@ class QwenEditModule(QwenManager):
     CONDITION_IMAGE_SIZE = 384 * 384
     INPUT_IMAGE_SIZE = 1024 * 1024
 
-    def __init__(self, settings: QwenConfig):
+    def __init__(self, settings: Settings):
         super().__init__(settings)
         self._empty_image = self._prepare_input_image(Image.new('RGB', (64, 64)))
 
