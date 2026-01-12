@@ -37,7 +37,7 @@ class QwenEditModule(QwenManager):
 
     def __init__(self, settings: Settings):
         super().__init__(settings)
-        self._empty_image = Image.new('RGB', (1024, 1024))
+        self._empty_image = self._prepare_input_image(Image.new('RGB', (64, 64)))
 
         self.base_model_path = settings.qwen_edit_base_model_path
         self.edit_model_path = settings.qwen_edit_model_path
@@ -111,6 +111,8 @@ class QwenEditModule(QwenManager):
                        seed: Optional[int] = None,
                        **kwargs):
         prompt_images = list(self._prepare_input_image(prompt_image) for prompt_image in prompt_images)
+
+        logger.info(f"prompt_images length is : {len(prompt_images)}")
 
         return self._run_model_pipe(seed=seed, image=prompt_images, **kwargs)
 
