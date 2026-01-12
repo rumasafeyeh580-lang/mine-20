@@ -107,13 +107,12 @@ class QwenEditModule(QwenManager):
         return result
     
     def _run_edit_pipe(self,
-                       prompt_image: Image.Image,
+                       prompt_images: Iterable[Image.Image],
                        seed: Optional[int] = None,
                        **kwargs):
-        prompt_image = self._prepare_input_image(prompt_image)
-        logger.info(f"Prompt image size: {prompt_image.size}")
-        logger.info(f"Prompt image: {kwargs}")
-        return self._run_model_pipe(seed=seed, image=prompt_image, **kwargs)
+        prompt_images = list(self._prepare_input_image(prompt_image) for prompt_image in prompt_images)
+
+        return self._run_model_pipe(seed=seed, image=prompt_images, **kwargs)
 
 
     def _text_prompting_to_embedded(self, text_prompting: TextPrompting, images: Iterable[Image.Image]) -> EmbeddedPrompting:
