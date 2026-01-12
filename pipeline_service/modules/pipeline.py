@@ -109,9 +109,14 @@ class GenerationPipeline:
 
         images_edited = self._edit_images(image, seed)
 
+        logger.info("image editing is done")
+
         images_with_background = [img.copy() for img in images_edited]
 
+
         images_without_background = [self.rmbg.remove_background(img) for img in images_with_background]
+
+        logger.info("background removing is done")
 
         return images_without_background
 

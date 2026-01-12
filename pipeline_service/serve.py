@@ -83,6 +83,7 @@ async def run_champion_generation(
     # START TIMER: Begin when Qwen editing starts
     generation_start = time.time()
     
+    logger.info("preparing input images")
     images_without_background = await pipeline.prepare_input_images(image_bytes, seed)
 
     from schemas import TrellisRequest, TrellisParams
