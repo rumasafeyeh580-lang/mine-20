@@ -69,8 +69,8 @@ class QwenManager:
         self.pipe = self._get_model_pipe(transformer, scheduler)
 
         self.pipe.load_lora_weights(
-            self.settings.lora_path,
-            weight_name=self.settings.base_model_path
+            self.settings.qwen_edit_lora_repo,
+            weight_name=self.settings.qwen_edit_base_model_path
         )
         # Move model pipe to device
         self.pipe = self.pipe.to(self.device)
