@@ -6,7 +6,6 @@ from pydantic import RootModel
 from os import PathLike
 from pathlib import Path
 from typing import Dict, Optional
-from config.settings import QwenConfig
 from modules.image_edit.prompting import EmbeddedPrompting, Prompting, TextPrompting
 
 
