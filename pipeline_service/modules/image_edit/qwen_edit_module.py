@@ -153,6 +153,7 @@ class QwenEditModule(QwenManager):
 
         images = list(self._prepare_input_image(img, self.CONDITION_IMAGE_SIZE) for img in images)
         
+        logger.info("encode_prompt")
         for p in text_prompting.prompt:
             # encode_prompt returns tensors of shape [batch_size_per_prompt, seq_len, hidden_dim]
             e, m = self.pipe.encode_prompt(
@@ -161,6 +162,9 @@ class QwenEditModule(QwenManager):
             )
             embeds_list.append(e)
             masks_list.append(m)
+            logger.info("encode_prompt done")
+        
+
 
         # Total batch = sum of all individual batches
         total_batch = sum(e.shape[0] for e in embeds_list)
@@ -181,8 +185,10 @@ class QwenEditModule(QwenManager):
             output_masks[current_idx : current_idx + b, :s] = m
             current_idx += b
 
-        # create EmbeddedPrompting
+        # create EmbeddedPrompting  
+        logger.info("creating embedded_prompting")
         embedded_prompting = EmbeddedPrompting(prompt_embeds=output_embeds, prompt_embeds_mask = output_masks)
+        logger.info("embedded_prompting done")
         return embedded_prompting
     
     def edit_image(self, prompt_image: Image.Image | Iterable[Image.Image], seed: int, prompting: TextPrompting, encode_prompt: bool = True):
@@ -205,8 +211,10 @@ class QwenEditModule(QwenManager):
 
             prompt_images = list(prompt_image) if isinstance(prompt_image, Iterable) else [prompt_image]
             
+            logger.info("_text_prompting_to_embedded")
             prompting = self._text_prompting_to_embedded(prompting, prompt_images)
 
+            logger.info("model dump")
             prompting_args = prompting.model_dump()
             
             # Run the edit pipe
