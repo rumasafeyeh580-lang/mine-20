@@ -117,8 +117,8 @@ class QwenEditModule(QwenManager):
                 "use_karras_sigmas": False,
             }
 
-    def _prepare_input_image(self, image: Image, megapixels: float = 1.0):
-        total = int(megapixels * 1024 * 1024)
+    def _prepare_input_image(self, image: Image, pixels: int = INPUT_IMAGE_SIZE):
+        total = int(pixels)
 
         scale_by = math.sqrt(total / (image.width * image.height))
         width = round(image.width * scale_by)
