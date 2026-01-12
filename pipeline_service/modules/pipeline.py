@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import base64
 import io
+from pathlib import Path
 import time
 from typing import Literal, Optional
 
@@ -38,8 +39,8 @@ class GenerationPipeline:
         self.rmbg = BackgroundRemovalService(settings)
         self.trellis = TrellisService(settings)
 
-        self.prompting_library_base = PromptingLibrary.from_file("prompts/qwen_edit_prompt_base.json")
-        self.prompting_library_multistage = PromptingLibrary.from_file("prompts/qwen_edit_prompt_multistage.json")
+        self.prompting_library_base = PromptingLibrary.from_file(Path("prompts/qwen_edit_prompt_base.json"))
+        self.prompting_library_multistage = PromptingLibrary.from_file(Path("prompts/qwen_edit_prompt_multistage.json"))
 
     async def startup(self) -> None:
         logger.info("Starting pipeline")
