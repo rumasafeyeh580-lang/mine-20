@@ -6,7 +6,7 @@ import time
 from typing import Literal, Optional
 
 from PIL import Image
-from pipeline_service.config.prompting_library import PromptingLibrary
+from config.prompting_library import PromptingLibrary
 import torch
 import gc
 
