@@ -2,6 +2,7 @@ import math
 from os import PathLike
 from pathlib import Path
 from typing import Optional, Any, Literal
+from modules.image_edit.prompting import Prompting, TextPrompting, EmbeddedPrompting
 from safetensors import safe_open
 import torch
 from pydantic import BaseModel, Field, BeforeValidator
@@ -28,37 +29,6 @@ from config import Settings
 
 CONDITION_IMAGE_SIZE = 384 * 384
 INPUT_IMAGE_SIZE = 1024 * 1024
-
-def ensure_string_tuple(s: Any) -> List[str] | Any:
-    if isinstance(s, str):
-        return [s,]
-    return list(s)
-
-TextPrompts = Annotated[List[str], BeforeValidator(ensure_string_tuple)]
-
-class Prompting(ABC):
-    @abstractmethod
-    def model_dump(self, *args, **kwargs):
-        pass
-
-    @abstractmethod
-    def __len__(self):
-        pass
-
-class EmbeddedPrompting(BaseModel,Prompting):
-    prompt_embeds: BFloatTensor
-    prompt_embeds_mask: Optional[IntTensor] = None
-
-    def __len__(self):
-        return len(self.prompt_embeds)
-
-
-class TextPrompting(BaseModel, Prompting):
-    prompt: TextPrompts = Field(alias="positive")
-    negative_prompt: Optional[TextPrompts] = Field(default=None, alias="negative")
-
-    def __len__(self):
-        return len(self.prompt)
 
 class QwenEditModule(QwenManager):
     """Qwen module for image editing operations."""

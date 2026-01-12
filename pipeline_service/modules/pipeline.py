@@ -6,6 +6,7 @@ import time
 from typing import Literal, Optional
 
 from PIL import Image
+from pipeline_service.config.prompting_library import PromptingLibrary
 import torch
 import gc
 
@@ -36,6 +37,9 @@ class GenerationPipeline:
         self.qwen_edit = QwenEditModule(settings)
         self.rmbg = BackgroundRemovalService(settings)
         self.trellis = TrellisService(settings)
+
+        self.prompting_library_base = PromptingLibrary.from_file("prompts/qwen_edit_prompt_base.json")
+        self.prompting_library_multistage = PromptingLibrary.from_file("prompts/qwen_edit_prompt_multistage.json")
 
     async def startup(self) -> None:
         logger.info("Starting pipeline")
@@ -71,14 +75,8 @@ class GenerationPipeline:
             List of edited images
         """
         
-        background_prompt: TextPrompting = {
-            "positive": "Show this object in left three-quarters view and make sure it is fully visible. Turn background neutral solid color contrasting with an object. Delete background details. Delete watermarks. Keep object colors. Sharpen image details",
-            "negative": ""
-        }
-        views_prompt: TextPrompting = {
-            "positive": ["Show this object in right three-quarters view and make sure it is fully visible. Turn background neutral solid color contrasting with an object. Delete background details. Delete watermarks. Keep object colors. Sharpen image details",
-                        "Show this object in back view and make sure it is fully visible. Turn background neutral solid color contrasting with an object. Delete background details. Delete watermarks. Keep object colors. Sharpen image details"]
-        }
+        background_prompt = self.prompting_library_multistage.promptings['background']
+        views_prompt = self.prompting_library_multistage.promptings['views']
         logger.info("call edit_image")
         # Stage 0: Remove background
         images = self.qwen_edit.edit_image(
