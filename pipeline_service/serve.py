@@ -83,11 +83,7 @@ async def run_champion_generation(
     # START TIMER: Begin when Qwen editing starts
     generation_start = time.time()
     
-    (
-        left_image_without_background,
-        right_image_without_background,
-        original_image_without_background,
-    ) = await pipeline.prepare_input_images(image_bytes, seed)
+    images_without_background = await pipeline.prepare_input_images(image_bytes, seed)
 
     from schemas import TrellisRequest, TrellisParams
     params = TrellisParams.from_settings(settings)
@@ -95,7 +91,7 @@ async def run_champion_generation(
     # STAGE 1: Generate max_candidates shape candidates
     logger.info(f"🎲 STAGE 1: Generating {settings.max_candidates} shape candidates...")
     trellis_req = TrellisRequest(
-        images=[left_image_without_background, right_image_without_background, original_image_without_background],
+        images=images_without_background,
         seed=seed,
         params=params,
     )
